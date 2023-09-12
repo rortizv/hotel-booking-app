@@ -1,1 +1,62 @@
-<button mat-raised-button color="primary" routerLink="/create-hotel">Create Hotel</button>
+<mat-toolbar color="primary">
+  <span>Hotel Booking App</span>
+</mat-toolbar>
+
+<div class="table-container">
+  <div class="displayFlex">
+    <mat-form-field>
+      <mat-label>Filter</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
+    </mat-form-field>
+    <button
+      style="width: 9rem; margin-top: 10px;"
+      mat-raised-button color="primary"
+      (click)="goToCreateHotel()">
+      Create Hotel
+    </button>
+  </div>
+
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef class="center-text"> Name </th>
+      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="location">
+      <th mat-header-cell *matHeaderCellDef class="center-text"> Location </th>
+      <td mat-cell *matCellDef="let element"> {{element.location}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="rooms">
+      <th mat-header-cell *matHeaderCellDef class="center-text"> Rooms </th>
+      <td mat-cell *matCellDef="let element" class="center-text"> {{element.rooms.length}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="state">
+      <th mat-header-cell *matHeaderCellDef class="center-text"> State </th>
+      <td mat-cell *matCellDef="let element" class="center-text"
+          [ngClass]="{'activated-text': element.state, 'disabled-text': !element.state}">
+        {{element.state ? 'Activated' : 'Disabled'}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef class="center-text"> Actions </th>
+      <td mat-cell *matCellDef="let element" class="center-text">
+        <button mat-button color="primary" (click)="changeState(element)">{{element.state ? 'Deactivate' : 'Activate'}}</button>
+        <button mat-button color="primary" (click)="goToEditHotel(element)">Edit</button>
+        <button mat-button color="warn" (click)="deleteHotel(element.uuid)">Delete</button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    <!-- Row shown when there is no matching data. -->
+    <tr class="mat-row" *matNoDataRow class="displayFlex">
+      <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+    </tr>
+  </table>
+
+</div>

@@ -1,6 +1,9 @@
-<div class="hotel-create">
-  <h2>Create Hotel</h2>
-  <form [formGroup]="hotelForm">
+<div class="hotel-create" [ngClass]="{ 'disabled-overlay': isLoading }">
+  <h2>{{hotel?.uuid ? 'Update' : 'Create'}} Hotel</h2>
+  <div *ngIf="isLoading" class="spinner-container">
+    <mat-spinner diameter="32" color="primary"></mat-spinner>
+  </div>
+  <form [formGroup]="hotelForm" class="hotel-form" *ngIf="!isLoading">
     <div class="displayFlex">
       <mat-form-field>
         <mat-label>Name</mat-label>
@@ -11,39 +14,59 @@
         <input matInput formControlName="location" placeholder="For example: Cartagena">
       </mat-form-field>
     </div>
-    <div *ngIf="hotelForm.get('rooms')" formArrayName="rooms">
-      <button mat-raised-button type="button" color="accent" (click)="addRoom()">Add Room</button>
+    <div *ngIf="hotelForm.get('rooms')" formArrayName="rooms" class="rooms">
+      <button mat-raised-button type="button" class="add-room" color="accent" (click)="addRoom()">Add Room</button>
       <div *ngFor="let room of getRoomControls(); let i = index">
         <div [formGroupName]="i">
           <mat-card>
             <mat-card-content>
-              <mat-form-field>
-                <mat-label>Room ID</mat-label>
-                <input matInput formControlName="id" placeholder="For example: 303">
-              </mat-form-field>
-              <mat-form-field>
-                <mat-label>Room Type</mat-label>
-                <input matInput formControlName="type" placeholder="For example: double">
-              </mat-form-field>
-              <mat-form-field>
-                <mat-label>Room Price</mat-label>
-                <input matInput formControlName="price" type="number">
-              </mat-form-field>
-              <mat-form-field>
-                <mat-label>Room Tax</mat-label>
-                <input matInput formControlName="tax" type="number">
-              </mat-form-field>
-              <mat-form-field>
-                <mat-label>Room Location</mat-label>
-                <input matInput formControlName="location" placeholder="For example: Montevideo">
-              </mat-form-field>
+              <div class="displayFlex">
+                <mat-form-field>
+                  <mat-label>Room ID</mat-label>
+                  <input matInput formControlName="id" placeholder="For example: 303">
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Room Type</mat-label>
+                  <input matInput formControlName="type" placeholder="For example: double">
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Room Location</mat-label>
+                  <input matInput formControlName="location" placeholder="For example: Montevideo">
+                </mat-form-field>
+              </div>
+              <div class="displayFlex">
+                <mat-form-field>
+                  <mat-label>Room Price</mat-label>
+                  <input matInput formControlName="price" type="number">
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Room Tax</mat-label>
+                  <input matInput formControlName="tax" type="number">
+                </mat-form-field>
+                <mat-slide-toggle formControlName="state">Room state</mat-slide-toggle>
+                <div class="flexEnd deleteBtnCont">
+                  <button mat-icon-button color="warn" (click)="deleteRoom(i)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </div>
             </mat-card-content>
           </mat-card>
         </div>
       </div>
     </div>
-
-    <mat-divider></mat-divider>
-    <button mat-raised-button color="primary" [disabled]="!hotelForm.valid" (click)="createHotel()">Create</button>
   </form>
+  <mat-divider></mat-divider>
+  <div class="displayFlex">
+    <div class="mt-1">
+      <button mat-button (click)="goBack()">
+        Go back
+      </button>
+    </div>
+    <div class="flexEnd mt-1">
+      <button mat-raised-button color="primary" [disabled]="!hotelForm.valid" (click)="fireAction()">
+        {{ hotel?.uuid ? 'Update' : 'Create' }}
+      </button>
+    </div>
+  </div>
 </div>

@@ -8,3 +8,21 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   display: flex;
   gap: 1rem;
 }
+
+.flexEnd {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.spaceAround {
+  display: flex;
+  justify-content: space-around;
+}
+
+.mt-1 {
+  margin-top: 1rem;
+}
+
+.clickable {
+  cursor: pointer;
+}
